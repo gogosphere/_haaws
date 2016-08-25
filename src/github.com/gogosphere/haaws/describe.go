@@ -75,12 +75,29 @@ func DescribeInstances() {
 	uri := "describe-instances.json"
 	results := getdata(uri)
 	var s InstanceStruct
-	//unique := make(map[string][]string)
-	json.Unmarshal(results, &s)
-	for k, v := range s.Reservations {
-		fmt.Println(k, v.Instances[0].InstanceId, v.ReservationId, v.OwnerId, v.Groups)
-	}
+	instancetotag := make(map[string][]string)
+	instancetotagkey := make(map[string]map[string][]string)
 
+	json.Unmarshal(results, &s)
+	for _, v := range s.Reservations {
+		//fmt.Println(k, v.Instances[0].InstanceId, v.ReservationId, v.OwnerId, v.Groups)
+		for _, vv := range v.Instances[0].Tags {
+			tags := vv.Key + " : " + vv.Value
+			instancetotag[v.Instances[0].InstanceId] = append(instancetotag[v.Instances[0].InstanceId], tags)
+			if instancetotagkey[vv.Key] == nil {
+				instancetotagkey[vv.Key] = make(map[string][]string)
+			}
+			instancetotagkey[vv.Key][vv.Value] = append(instancetotagkey[vv.Key][vv.Value], v.Instances[0].InstanceId)
+		}
+	}
+    /* key -> value -> instances layout
+	for k, v := range instancetotagkey {
+
+		for kk, vv := range v {
+			fmt.Printf("%s => %s => %v\n", k, kk, vv)
+		}
+	}
+    */
 }
 
 func getdata(uri string) []byte {
