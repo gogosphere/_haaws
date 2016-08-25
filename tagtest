@@ -1,0 +1,57 @@
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+type Foo struct {
+	Tags []struct {
+		Key          string
+		ResourceId   string
+		ResourceType string
+		Value        string
+	}
+}
+
+func main() {
+
+	hold := make(map[string][]string)
+	results := getdata()
+	var r Foo
+	json.Unmarshal(results, &r)
+
+	for _, v := range r.Tags {
+		hold[v.ResourceType] = append(hold[v.ResourceType], v.Value)
+	}
+
+	for k, _ := range hold {
+		fmt.Println(k)
+	}
+}
+
+func getdata() []byte {
+	var jsonStr []byte
+
+	url := "http://localhost:8080/describe-tags.json"
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		log.Fatal("Die: ", err)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	return body
+}
