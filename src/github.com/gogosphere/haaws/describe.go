@@ -51,6 +51,7 @@ func DescribeSubnets() {
 		vpctoaz[v.VpcId] = append(vpctoaz[v.VpcId], v.AvailabilityZone)
 		vpctosub[v.VpcId] = append(vpctosub[v.VpcId], v.SubnetId)
 		vpctoinst[v.VpcId] = append(vpctoinst[v.VpcId], v.CidrBlock)
+
 	}
 }
 
@@ -90,14 +91,25 @@ func DescribeInstances() {
 			instancetotagkey[vv.Key][vv.Value] = append(instancetotagkey[vv.Key][vv.Value], v.Instances[0].InstanceId)
 		}
 	}
-    /* key -> value -> instances layout
-	for k, v := range instancetotagkey {
 
+	// this is important because if I find an instance b
+	for k, v := range instancetotagkey {
 		for kk, vv := range v {
-			fmt.Printf("%s => %s => %v\n", k, kk, vv)
+			if kk == "platformengineering@homeaway.com" {
+				for _, vvv := range vv {
+					fmt.Println(k, vv, vvv)
+				}
+			}
 		}
 	}
-    */
+	//key -> value -> instances layout
+	//for k, v := range instancetotagkey {
+
+	//for kk, vv := range v {
+	//	fmt.Printf("%s => %s => %v\n", k, kk, vv)
+	//}
+	//}
+
 }
 
 func getdata(uri string) []byte {
