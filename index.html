@@ -7,7 +7,7 @@
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable(
-          [ 
+          [ ['aws'],
           ['aws us-east-1b vpc-2ba4e44c subnet-570c127d '],
 ['aws us-east-1e vpc-2ba4e44c subnet-98c9d2a5 '],
 ['aws us-east-1d vpc-d9087bbe subnet-99949cc1 '],
@@ -39,8 +39,9 @@
 
         var options = {
           wordtree: {
-            format: 'implicit',
-            word: 'aws'
+            format: 'Implicit',
+            word: 'aws',
+            forceIFrame: true,
           }
         };
 
@@ -50,7 +51,7 @@
     </script>
   </head>
   <body>
-    <div id="wordtree_basic" style="width: 1700px; height: 1700px;"></div>
+    <div id="wordtree_basic" style="width: 1700px; height: 640px;"></div>
   </body>
 </html>
 
