@@ -74,7 +74,7 @@ func DescribeInstances(zz map[int][]string) map[int][]string {
 	json.Unmarshal(results, &s)
 	for _, v := range s.Reservations {
 		//fmt.Println(k, v.Instances[0].InstanceId, v.ReservationId, v.OwnerId, v.Groups)
-		appendinstancemap[v.Instances[0].SubnetId] = append(appendinstancemap[v.Instances[0].SubnetId],v.Instances[0].InstanceId)
+		appendinstancemap[v.Instances[0].SubnetId] = append(appendinstancemap[v.Instances[0].SubnetId], v.Instances[0].InstanceId)
 	}
 
 	for q, r := range zz {
@@ -84,11 +84,11 @@ func DescribeInstances(zz map[int][]string) map[int][]string {
 	}
 
 	/*
-	for k, v := range subnetaskey {
-		_ = v
-		_ = k
-		fmt.Println(k)
-	}
+		for k, v := range subnetaskey {
+			_ = v
+			_ = k
+			fmt.Println(k)
+		}
 	*/
 	return zz
 }
