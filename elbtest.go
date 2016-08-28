@@ -1,11 +1,25 @@
 package main
 
-import "github.com/gogosphere/haaws"
+import (
+
+ "github.com/gogosphere/haaws"
+ "fmt"
+)
 
 func main() {
 
-	//haaws.DescribeAll()
-	//haaws.DescribeLoadBalancers()
-	haaws.DescribeInstances()
-	//haaws.DescribeTags()
+	results := haaws.DescribeSubnets()
+
+	for k, v := range results {
+		fmt.Printf("['aws ")
+		for _, vv := range v{
+			fmt.Printf("%v ", vv)
+		}
+		fmt.Println("'],")
+		
+
+		_ = k
+		_ = v
+	}
+
 }

@@ -13,10 +13,10 @@ func DescribeAll() {
 	DescribeLoadBalancers()
 	DescribeSubnets()
 	DescribeTags()
-	DescribeInstances()
+	//DescribeInstances()
 }
 
-func DescribeLoadBalancers() {
+func DescribeLoadBalancers() map[string][]string {
 
 	//avals := make(map[string][]string)
 	uri := "describe-load-balancers.json"
@@ -35,24 +35,62 @@ func DescribeLoadBalancers() {
 			elbwithinsts[v.DNSName] = append(elbwithinsts[v.DNSName], vv.InstanceId)
 		}
 	}
+	return elbwithinsts
 }
 
-func DescribeSubnets() {
+func DescribeSubnets() map[int][]string {
 
 	uri := "describe-subnets.json"
 	results := getdata(uri)
 	var s SubnetStruct
 	json.Unmarshal(results, &s)
+
 	vpctoaz := make(map[string][]string)
 	vpctosub := make(map[string][]string)
 	vpctoinst := make(map[string][]string)
+	i := 0
+	q := make(map[int][]string)
 	for _, v := range s.Subnets {
 
 		vpctoaz[v.VpcId] = append(vpctoaz[v.VpcId], v.AvailabilityZone)
 		vpctosub[v.VpcId] = append(vpctosub[v.VpcId], v.SubnetId)
 		vpctoinst[v.VpcId] = append(vpctoinst[v.VpcId], v.CidrBlock)
 
+		q[i] = []string{v.AvailabilityZone, v.VpcId, v.SubnetId}
+		i++
 	}
+	zz := DescribeInstances(q)
+	return zz
+}
+
+func DescribeInstances(zz map[int][]string) map[int][]string {
+	uri := "describe-instances.json"
+	results := getdata(uri)
+	var s InstanceStruct
+	//instancetotag := make(map[string][]string)
+	//instancetotagkey := make(map[string]map[string][]string)
+	//subnetaskey := make(map[string]map[string][]string)
+	appendinstancemap := make(map[string][]string)
+	json.Unmarshal(results, &s)
+	for _, v := range s.Reservations {
+		//fmt.Println(k, v.Instances[0].InstanceId, v.ReservationId, v.OwnerId, v.Groups)
+		appendinstancemap[v.Instances[0].SubnetId] = append(appendinstancemap[v.Instances[0].SubnetId],v.Instances[0].InstanceId)
+	}
+
+	for q, r := range zz {
+		_ = q
+		_ = r
+		zz[q] = append(zz[q], appendinstancemap[r[2]]...)
+	}
+
+	/*
+	for k, v := range subnetaskey {
+		_ = v
+		_ = k
+		fmt.Println(k)
+	}
+	*/
+	return zz
 }
 
 func DescribeTags() {
@@ -69,46 +107,6 @@ func DescribeTags() {
 	for _, v := range unique {
 		fmt.Println(v)
 	}
-
-}
-
-func DescribeInstances() {
-	uri := "describe-instances.json"
-	results := getdata(uri)
-	var s InstanceStruct
-	instancetotag := make(map[string][]string)
-	instancetotagkey := make(map[string]map[string][]string)
-
-	json.Unmarshal(results, &s)
-	for _, v := range s.Reservations {
-		//fmt.Println(k, v.Instances[0].InstanceId, v.ReservationId, v.OwnerId, v.Groups)
-		for _, vv := range v.Instances[0].Tags {
-			tags := vv.Key + " : " + vv.Value
-			instancetotag[v.Instances[0].InstanceId] = append(instancetotag[v.Instances[0].InstanceId], tags)
-			if instancetotagkey[vv.Key] == nil {
-				instancetotagkey[vv.Key] = make(map[string][]string)
-			}
-			instancetotagkey[vv.Key][vv.Value] = append(instancetotagkey[vv.Key][vv.Value], v.Instances[0].InstanceId)
-		}
-	}
-
-	// this is important because if I find an instance b
-	for k, v := range instancetotagkey {
-		for kk, vv := range v {
-			if kk == "platformengineering@homeaway.com" {
-				for _, vvv := range vv {
-					fmt.Println(k, vv, vvv)
-				}
-			}
-		}
-	}
-	//key -> value -> instances layout
-	//for k, v := range instancetotagkey {
-
-	//for kk, vv := range v {
-	//	fmt.Printf("%s => %s => %v\n", k, kk, vv)
-	//}
-	//}
 
 }
 

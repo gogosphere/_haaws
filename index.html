@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {packages:['wordtree']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(
+          [ 
+          ['aws us-east-1b vpc-2ba4e44c subnet-570c127d '],
+['aws us-east-1e vpc-2ba4e44c subnet-98c9d2a5 '],
+['aws us-east-1d vpc-d9087bbe subnet-99949cc1 '],
+['aws us-east-1d vpc-2ba4e44c subnet-31706f69 '],
+['aws us-east-1c vpc-d9087bbe subnet-ac0ff4e5 '],
+['aws us-east-1e vpc-d9087bbe subnet-cb998af6 '],
+['aws us-east-1c vpc-2ba4e44c subnet-4c3ff105 '],
+['aws us-east-1c vpc-d9087bbe subnet-ad0ff4e4 '],
+['aws us-east-1b vpc-fcb4089b subnet-767b225c '],
+['aws us-east-1b vpc-fcb4089b subnet-777b225d '],
+['aws us-east-1d vpc-d9087bbe subnet-98949cc0 '],
+['aws us-east-1e vpc-d9087bbe subnet-c9998af4 '],
+['aws us-east-1c vpc-fcb4089b subnet-5a08012c '],
+['aws us-east-1c vpc-d9087bbe subnet-aa0ff4e3 '],
+['aws us-east-1d vpc-fcb4089b subnet-f9f1aaa1 i-a8c24638 i-47c245d7 i-16388386 i-6fb395ff i-ea5b427a i-06819f96 '],
+['aws us-east-1d vpc-fcb4089b subnet-f9f1aaa1 i-f27fa562 i-d53f8445 i-6b333afb i-17388387 i-10b39580 i-19388389 '],
+['aws us-east-1d vpc-fcb4089b subnet-f8f1aaa0 '],
+['aws us-east-1d vpc-d9087bbe subnet-9a949cc2 '],
+['aws us-east-1c vpc-fcb4089b subnet-5c08012a '],
+['aws us-east-1c vpc-fcb4089b subnet-5d08012b i-32e884b4 i-40f498c6 i-9930521f i-783052fe i-9723ce0e i-7d3052fb '],
+['aws us-east-1c vpc-fcb4089b subnet-5d08012b i-4c21ccd5 i-7616c8ef i-95305213 i-8a3d8813 i-50f49bd6 i-fc4df865 i-c69c2640 '],
+['aws us-east-1d vpc-fcb4089b subnet-c7f1aa9f '],
+['aws us-east-1e vpc-d9087bbe subnet-c8998af5 '],
+['aws us-east-1b vpc-fcb4089b subnet-747b225e i-424e8173 i-23a2efbd i-e62b3e7a i-32283dae i-39b7aaa7 i-efa3ee71'], 
+['aws us-east-1b vpc-fcb4089b subnet-747b225e i-e27d85d3 i-0a283d96 i-e785a47b i-97d1c00b i-be2b3e22 i-307b8301 i-577d8566 i-af727731 i-a54f8094 i-af4e819e i-632731ff '],
+['aws us-east-1b vpc-fcb4089b subnet-747b225e i-577d8566 i-af727731 i-a54f8094 i-af4e819e i-632731ff '],
+          ]
+        );
+
+        var options = {
+          wordtree: {
+            format: 'implicit',
+            word: 'aws'
+          }
+        };
+
+        var chart = new google.visualization.WordTree(document.getElementById('wordtree_basic'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="wordtree_basic" style="width: 1700px; height: 1700px;"></div>
+  </body>
+</html>
+
